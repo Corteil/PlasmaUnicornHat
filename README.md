@@ -6,11 +6,12 @@ I was lucky to be given a number of Unicorn hats by Pimoroni to pass on for peop
 ## What different?
 in use you should not see any different, you may have issuses between the differances between MicroPython and Python plus any libraries used. For example: some of the Pimoroni examples use the colorsys library for converting the HSV colour system to RGB values. There is not a verison of this library available for MicroPython*, therefore the examples using this library will not run. Other differances is that the Plasma library does not have a brightness fuction for Neopixels also the `show()` function was redundant as the Neopixels are updated in real time, I rewriten the library to reimplement the `show()` function plus added a function to turn on/off the auto write function.
 
-\* I have writting a basic library that replicates this single function and have included it here :-)
+\* I have writting a basic library that replicates this single function and have included it here, to use it `import hsvToRGB as colorsys` :-)
 
 ## How to use the library
 There is a couple of ways to use the library, first way is to rename plasmaunicornhat.py to unicornhat.py you will need to place the rename file in the 'lib' folder or in the same location as the code you wish to run.
 the next option is to `import plasmaunicornhat as unicorn`, place plasmaunicornhat in the 'lib' folder or the same location as your code.
+
 `unicorn.set_neopixel_auto_write(True)` turns on the auto-write and `False` will turn auto-write off when plasmaunicornhat is imported as unicorn.
 
 ## What's left?
