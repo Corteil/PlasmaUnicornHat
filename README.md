@@ -14,5 +14,5 @@ the next option is to `import plasmaunicornhat as unicorn`, place plasmaunicornh
 `unicorn.set_neopixel_auto_write(True)` turns on the auto-write and `False` will turn auto-write off when plasmaunicornhat is imported as unicorn.
 
 ## What's left?
-The `set_gamma()` and `disable_gamma()` functions have not yet been implemented.
+The `set_gamma()` and `disable_gamma()` functions have not yet been implemented and will generate errors if called.
 
