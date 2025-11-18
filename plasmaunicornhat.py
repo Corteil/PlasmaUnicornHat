@@ -75,6 +75,9 @@ _is_setup = False
 
 # End of Pimoroni variables
 
+# set up the Pico W's onboard LED
+pico_led = Pin('LED', Pin.OUT)
+
 # unicorn setup
 
 unicorn_hat = None
@@ -82,26 +85,6 @@ neopixel_brightness = 0.5
 orientation = 0
 neopixel_auto_write = False
 
-
-unicorn_pixel_address = ([7 , 6 , 5 , 4 , 3 , 2 , 1 , 0 ],
-                         [8 , 9 , 10, 11, 12, 13, 14, 15],
-                         [23, 22, 21, 20, 19, 18, 17, 16],
-                         [24, 25, 26, 27, 28, 29, 30, 31],
-                         [39, 38, 37, 36, 35, 34, 33, 32],
-                         [40, 41, 42, 43, 44, 45, 46, 47],
-                         [55, 54, 53, 52, 51, 50, 49, 48],
-                         [56, 57, 58, 59, 60, 61, 62, 63])
-'''
-
-unicorn_pixel_address = ([0, 15, 16, 31, 32, 47, 48, 63],
-                         [1, 14, 17, 30, 33, 46, 49, 62],
-                         [2, 13, 18, 29, 34, 45, 50, 61],
-                         [3, 12, 19, 28, 35, 44, 51, 60],
-                         [4, 11, 20, 27, 36, 43, 52, 59],
-                         [5, 10, 21, 26, 37, 42, 53, 58],
-                         [6, 9, 22, 25, 38, 41, 54, 57],
-                         [7, 8, 23, 24, 39, 40, 55, 56])
-'''
 
 """
 Store a map of pixel indexes for
@@ -338,14 +321,6 @@ def get_index_from_xy(x, y):
     return index
 
 
-def find_pixel(X, Y):
-    # helper function instead of get_index_from_xy
-    #print(f"find pixel X: {X} Y: {Y}")
-    pixel = unicorn_pixel_address[Y][X]
-    #print(f"pixel: {pixel}")
-    return pixel
-
-
 def hsvToRGB(h, s, v):
     """Convert HSV color space to RGB color space
     
@@ -388,6 +363,36 @@ def set_pixel_hsv(x, y, h, s=None, v=None):
 
     set_pixel(x, y, r, g, b)
 
+'''
+def show_pixel(x, y, r, g=None, b=None):
+    setup()
+    
+    if type(r) is tuple:
+        r, g, b = r
+    elif type(r) is str:
+        try:
+            r, g, b = COLORS[r.lower()]
+        except KeyError:
+            raise ValueError('Invalid color!')
+
+    index = get_index_from_xy(x, y)
+
+    if index is not None:
+        # 1. gamma correct
+        r2, g2, b2 = apply_gamma(r, g, b)
+
+        # 2. scale brightness
+        rb = int(r2 * neopixel_brightness)
+        gb = int(g2 * neopixel_brightness)
+        bb = int(b2 * neopixel_brightness)
+
+        # 3. send to LED
+        unicorn_hat.set_rgb(index, rb, gb, bb)
+
+        # store *original* non-gamma framebuffer value
+        _pixels[index] = (r, g, b)
+'''
+
 
 def set_pixel(x, y, r, g=None, b=None):
     """Set a single pixel to RGB colour
@@ -424,7 +429,9 @@ def set_pixel(x, y, r, g=None, b=None):
     
     #pixel = find_pixel(x, y)
     #unicorn_hat.set_rgb(pixel, r, g, b)
-        
+
+
+
 def get_pixel(x, y):
     """Get the RGB value of a single pixel
 
@@ -527,6 +534,11 @@ def set_neopixel_auto_write(setting):
     neopixel_auto_write = setting
     #_is_setup = False
     #setup()
+    
+    
+def apply_gamma(r, g, b):
+    """Apply LED_GAMMA table to RGB values"""
+    return LED_GAMMA[r], LED_GAMMA[g], LED_GAMMA[b]
 
 """
 # unicorn setup end
@@ -538,5 +550,4 @@ time.sleep(1)
 #fill_unicorn(0, 255, 0)
 time.sleep(1)
 clear()
-
 """
