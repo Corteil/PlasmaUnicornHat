@@ -81,7 +81,7 @@ pico_led = Pin('LED', Pin.OUT)
 # unicorn setup
 
 unicorn_hat = None
-neopixel_brightness = 0.2
+neopixel_brightness = 0.5
 orientation = 0
 neopixel_auto_write = False
 
@@ -287,7 +287,6 @@ def brightness(b= 0.2):
     neopixel_brightness = b
 
 def get_brightness():
-    global neopixel_brightness
     return neopixel_brightness
 
 
@@ -402,7 +401,7 @@ def set_pixel(x, y, r, g=None, b=None):
     :param g: Amount of green from 0 to 255
     :param b: Amount of blue from 0 to 255
     """
-    global neopixel_auto_write, brightness
+    
     setup()
     
     
@@ -494,7 +493,7 @@ def show_pixel(x, y, r, g=None, b=None):
     :param g: Amount of green from 0 to 255
     :param b: Amount of blue from 0 to 255
     """
-    global brightness
+    
     setup()
     
     if type(r) is tuple:
