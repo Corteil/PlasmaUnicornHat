@@ -76,7 +76,7 @@ _is_setup = False
 # End of Pimoroni variables
 
 # set up the Pico W's onboard LED
-pico_led = Pin('LED', Pin.OUT)
+#pico_led = Pin('LED', Pin.OUT)
 
 # unicorn setup
 
